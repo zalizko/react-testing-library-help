@@ -19,13 +19,13 @@ class Counter extends React.Component {
   constructor() {
     super()
     this.state = {
-      loaded: false,
+      loaded: true,
     }
   }
 
   async componentDidMount() {
     const promise = new Promise((resolve, reject) => {
-      setTimeout(() => resolve(true), 250)
+      setTimeout(() => resolve(false), 250)
     })
 
     const result = await promise
@@ -43,7 +43,7 @@ class Counter extends React.Component {
   }
 }
 
-test('renders counter', async () => {
+test('counter shouldn\'t render', async () => {
   render(<Counter />)
   screen.debug();
 
