@@ -12,20 +12,43 @@ import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import {render, screen} from '@testing-library/react'
 
-function Counter() {
-  const [count, setCount] = React.useState(0)
-  return (
-    <>
-      <p>{count}</p>
-      <button onClick={() => setCount(count + 1)}>click me</button>
-    </>
-  )
+
+class Counter extends React.Component {
+  result
+
+  constructor() {
+    super()
+    this.state = {
+      loaded: false,
+    }
+  }
+
+  async componentDidMount() {
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => resolve(true), 250)
+    })
+
+    const result = await promise
+
+    this.setState({
+      loaded: result,
+    })
+  }
+
+  render() {
+    if (!this.state.loaded) {
+      return null
+    }
+    return <div>hello</div>
+  }
 }
 
 test('renders counter', async () => {
   render(<Counter />)
-  const count = screen.getByText('0')
-  const button = screen.getByText(/click me/i)
-  userEvent.click(button)
-  expect(count).toHaveTextContent('1')
+  screen.debug();
+
+  await new Promise((resolve)=> {
+    setTimeout(()=> screen.debug(), 500);
+  });
+
 })
